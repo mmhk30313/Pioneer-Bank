@@ -37,7 +37,8 @@
         .deposit,.withdraw,.balance{
             transition-duration: 0.8s;
             transition-delay: 0.2s;
-            overflow: scroll;
+            overflow: hidden;
+            /* overflow: scroll; */
 /* অনেক বড় সংখ্যা হতে পারে। যেমন Bil-Gates,Mark-JukerBerg...এর টাকা। তখন Overflow হয়ে যায়। */
         }
         .deposit:hover, .withdraw:hover, .balance:hover{
@@ -241,6 +242,15 @@
             let oldAmount = document.getElementById(curId).innerText;
             let curAmount = parseFloat(oldAmount) + parseFloat(newAmount);
             document.getElementById(curId).innerText = curAmount;
+            
+            // Boro number hole font-size komiye diyar code...
+            let curNum = document.getElementById(curId);
+            let curNumLength = curNum.innerText.length;
+            if(curNumLength>11){
+                curNum.style.fontSize = '25px';
+                //document.getElementsByClassName('status').style.overflow = 'scroll';
+                // curNum.style.overflow = 'hidden';
+            }
             // console.log(curAmount);
 
             //Current Balance...
@@ -252,6 +262,13 @@
                 oldAmount = document.getElementById(idBalance).innerText;
                 curAmount = parseFloat(oldAmount) - parseFloat(newAmount);
                 document.getElementById(idBalance).innerText = curAmount;
+            }
+            curNum = document.getElementById(idBalance);
+            curNumLength = curNum.innerText.length;
+            if(curNumLength>11){
+                curNum.style.fontSize = '25px';
+                //document.getElementsByClassName('status').style.overflow = 'scroll';
+                // curNum.style.overflow = 'hidden';
             }
             // console.log(curAmount);
 
