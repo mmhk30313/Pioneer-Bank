@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer Bank</title>
+    <link rel="shortcut icon" href="bank-icon-19.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        body{
+            padding: 100px;
+        }
+        .submit-area{
+            margin-top: 50px;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 3px 3px 15px grey;
+        }
+        #banking-area{
+            margin-top: 10px;
+            padding: 0px;
+            /* border-radius: 15px;
+            box-shadow: 3px 3px 15px grey; */
+            display: none;
+        }
+        .status{
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 3px 3px 15px grey;
+            height: 250px;
+            /* color: white; */
+        }
+        h4 , h1{
+            color: white;
+        }
+        .deposit{
+            background-image: linear-gradient(90deg,rgb(81, 47, 160),blue);
+        }
+        .withdraw{
+            background-image: linear-gradient(90deg,rgb(241, 55, 22),tomato);
+        }
+        .balance{
+            background-image: linear-gradient(90deg,rgba(255, 0, 157, 0.897),rgb(0, 183, 255));
+        }
+        .back{
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login-area -->
+    <div id="login-area">
+        <h1 class="text-center" style="color: black;">Welcome to Pioneer Bank</h1>
+        <div class="submit-area">
+            <h3>Log in</h3>
+            <input type="email" class="form-control" placeholder="Email">
+            <br>
+            <input type="password" class="form-control" placeholder="Password">
+            <br>
+            <button id = "enter" class="btn btn-success" type="submit">Enter</button>
+        </div>
+    </div>
+    <!-- Banking-area -->
+    <div id="banking-area">
+        <div class="row"><!--class= "text-center" korte pari text center e ante-->
+            <div class="col-md-4">
+                <div class="deposit status d-flex align-items-center">
+                    <div>
+                        <h4>Deposit</h4>
+                        <h1>$<span id="curDeposit">00</span></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="withdraw status d-flex align-items-center">
+                    <div>
+                        <h4>Withdraw</h4>
+                        <h1>$<span id="curWithdraw">00</span></h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="balance status d-flex align-items-center">
+                    <div>
+                        <h4>Balance</h4>
+                        <h1>$<span id="curBalance">1000</span></h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="submit-area">
+                    <h2>Deposit</h2>
+                    <input id="depositText" class="form-control" type="text" placeholder="$ amount you want to deposit">
+                    <br>
+                    <button id="addDeposit" class="btn btn-success">Deposit</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="submit-area">
+                    <h2>Withdraw</h2>
+                    <input id="withdrawText" class="form-control" type="text" placeholder="$ amount you want to withdraw">
+                    <br>
+                    <button id="addWithdraw" class="btn btn-success">Withdraw</button>
+                </div> 
+            </div>
+        </div>
+        <div class="back text-center">
+            <button onclick="back()" type="button" class="btn btn-warning">BACK</button>
+        </div>
+    </div>
+    <!-- Login-area & Banking-area ...script -->
+    <script>
+        function back(){
+            document.getElementById("banking-area").style.display = "none";
+            document.getElementById("login-area").style.display = "block";
+        }
+        // login-area vanish and banking-area comes...
+        let enter = document.getElementById("enter");
+        enter.addEventListener("click", function(){
+            // console.log(enterId);
+            document.getElementById("login-area").style.display = "none";
+            document.getElementById("banking-area").style.display = "block";
+        });
+
+        // Banking-area...Deposit & Balance...
+        const depositBtn = document.getElementById('addDeposit');
+        depositBtn.addEventListener('click', function(){
+            const depositAmount = parseFloat(document.getElementById('depositText').value);
+            // console.log(curDeposit);
+            // let curDeposit = parseFloat(document.getElementById('curDeposit').innerText);
+            // curDeposit += depositAmount;
+            // document.getElementById('curDeposit').innerHTML = curDeposit;
+            // const curBalance = parseFloat(document.getElementById('curBalance').innerText);
+            // console.log(curBalance);
+            updateAmount(depositAmount,'curDeposit','curBalance','depositText');
+
+        });
+
+        // Banking-area...withdraw & Balance...
+        const withdrawBtn = document.getElementById("addWithdraw");
+        withdrawBtn.addEventListener("click", function(){
+            const withdrawAmount = parseFloat(document.getElementById("withdrawText").value);
+            updateAmount(withdrawAmount,'curWithdraw','curBalance','withdrawText');
+        });
+
+        // Any Update...
+        function updateAmount(newAmount,curId,idBalance,clear){
+            //Current Deposit...
+            let oldAmount = document.getElementById(curId).innerText;
+            let curAmount = parseFloat(oldAmount) + parseFloat(newAmount);
+            document.getElementById(curId).innerText = curAmount;
+            // console.log(curAmount);
+
+            //Current Balance...
+            if(curId=='curDeposit'){
+                oldAmount = document.getElementById(idBalance).innerText;
+                curAmount = parseFloat(oldAmount) + parseFloat(newAmount);
+                document.getElementById(idBalance).innerText = curAmount;
+            }else{
+                oldAmount = document.getElementById(idBalance).innerText;
+                curAmount = parseFloat(oldAmount) - parseFloat(newAmount);
+                document.getElementById(idBalance).innerText = curAmount;
+            }
+            // console.log(curAmount);
+
+            document.getElementById(clear).value = "";
+
+        }
+    </script>
+    <!-- Bootstrap...script -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>
