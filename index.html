@@ -15,6 +15,7 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 3px 3px 15px grey;
+            
         }
         #banking-area{
             margin-top: 10px;
@@ -32,6 +33,16 @@
         }
         h4 , h1{
             color: white;
+        }
+        .deposit,.withdraw,.balance{
+            transition-duration: 0.8s;
+            transition-delay: 0.2s;
+            overflow: scroll;
+        }
+        .deposit:hover, .withdraw:hover, .balance:hover{
+            transform: scale(1.1);
+            transition: transform 1s;
+            /* overflow: scroll; */
         }
         .deposit{
             background-image: linear-gradient(90deg,rgb(81, 47, 160),blue);
@@ -53,9 +64,9 @@
         <h1 class="text-center" style="color: black;">Welcome to Pioneer Bank</h1>
         <div class="submit-area">
             <h3>Log in</h3>
-            <input type="email" class="form-control" placeholder="Email">
+            <input id="email" type="email" class="form-control" placeholder="Email: ........@gmail.com">
             <br>
-            <input type="password" class="form-control" placeholder="Password">
+            <input id="password" type="password" class="form-control" placeholder="Password: ##########">
             <br>
             <button id = "enter" class="btn btn-success" type="submit">Enter</button>
         </div>
@@ -106,8 +117,8 @@
                 </div> 
             </div>
         </div>
-        <div class="back text-center">
-            <button onclick="back()" type="button" class="btn btn-warning">BACK</button>
+        <div class="back text-right">
+            <button onclick="back()" type="button" class="btn btn-warning"><small>BACK</small></button>
         </div>
     </div>
     <!-- Login-area & Banking-area ...script -->
@@ -120,18 +131,31 @@
         // login-area vanish and banking-area comes...
         let enter = document.getElementById("enter");
         enter.addEventListener("click", function(){
-            // console.log(enterId);
-            document.getElementById('curDeposit').innerText = "00";
-            document.getElementById('curWithdraw').innerText = "00";
-            document.getElementById('curBalance').innerText = "1000";
-            document.getElementById("login-area").style.display = "none";
-            document.getElementById("banking-area").style.display = "block";
+            // console.log(document.getElementById("password").value);
+            // console.log( inputHandler("password"));
+            if(document.getElementById("email").value.length>0 && document.getElementById("password").value.length>0){
+                document.getElementById('curDeposit').innerText = "00";
+                document.getElementById('curWithdraw').innerText = "00";
+                document.getElementById('curBalance').innerText = "1000";
+                document.getElementById("login-area").style.display = "none";
+                document.getElementById("banking-area").style.display = "block";
+                document.getElementById("email").value = "";
+                document.getElementById("password").value = "";
+            }else{
+                if(document.getElementById("email").value=="" && document.getElementById("password").value==""){
+                    alert("Please Enter Your Email & Password");
+                }else if(document.getElementById("email").value==""){
+                    alert("Please Enter Your Email");
+                }else{
+                    alert("Please Enter Your Password");
+                }
+            }
         });
 
         //input handler....
         function inputHandler(id){
             let st = document.getElementById(id).value;
-            //console.log(st);
+            console.log(st);
             let cnt=0;
             for(let i=0;i<st.length;i++){
                 // console.log(st[i]=='0');
@@ -187,18 +211,26 @@
         // Banking-area...withdraw & Balance...
         const withdrawBtn = document.getElementById("addWithdraw");
         withdrawBtn.addEventListener("click", function(){
-            const withdrawAmount = parseFloat(document.getElementById("withdrawText").value);
-            try{
-                if(withdrawAmount<=0){
-                    throw Error;
-                }else if(inputHandler('withdrawText')){
-                    updateAmount(withdrawAmount,'curWithdraw','curBalance','withdrawText');
-                }else{
-                    throw Error;
-                }
-            }catch(err){
-                alert("Please Enter Your Withdraw Amount...")
+            const curBal = parseFloat(document.getElementById("curBalance").innerText);
+            const curWithdraw = parseFloat(document.getElementById("withdrawText").value);
+            const totalBalance = curBal-curWithdraw;
+            if(totalBalance<1000){
+                alert("Sorry!!! Your Account Must Have At Least $1000");
                 document.getElementById("withdrawText").value = "";
+            }else{
+                const withdrawAmount = parseFloat(document.getElementById("withdrawText").value);
+                try{
+                    if(withdrawAmount<=0){
+                        throw Error;
+                    }else if(inputHandler('withdrawText')){
+                        updateAmount(withdrawAmount,'curWithdraw','curBalance','withdrawText');
+                    }else{
+                        throw Error;
+                    }
+                }catch(err){
+                    alert("Please Enter Your Withdraw Amount...")
+                    document.getElementById("withdrawText").value = "";
+                }
             }
         });
 
