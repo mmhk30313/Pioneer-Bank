@@ -112,6 +112,7 @@
     </div>
     <!-- Login-area & Banking-area ...script -->
     <script>
+        // Back...
         function back(){
             document.getElementById("banking-area").style.display = "none";
             document.getElementById("login-area").style.display = "block";
@@ -120,21 +121,66 @@
         let enter = document.getElementById("enter");
         enter.addEventListener("click", function(){
             // console.log(enterId);
+            document.getElementById('curDeposit').innerText = "00";
+            document.getElementById('curWithdraw').innerText = "00";
+            document.getElementById('curBalance').innerText = "1000";
             document.getElementById("login-area").style.display = "none";
             document.getElementById("banking-area").style.display = "block";
         });
+
+        //input handler....
+        function inputHandler(id){
+            let st = document.getElementById(id).value;
+            //console.log(st);
+            let cnt=0;
+            for(let i=0;i<st.length;i++){
+                // console.log(st[i]=='0');
+                if('0'<=st[i] && st[i]<='9' || st[i]=='.'){
+                    if(st[i]=='.'){
+                        cnt++
+                    }
+                }else{
+                    cnt=10;
+                    break;
+                }
+            }
+            if(cnt>1 || st==""){
+                //console.log("String");
+                return false;
+            }else{
+                return true;
+            }
+
+        }
 
         // Banking-area...Deposit & Balance...
         const depositBtn = document.getElementById('addDeposit');
         depositBtn.addEventListener('click', function(){
             const depositAmount = parseFloat(document.getElementById('depositText').value);
+            //console.log(document.getElementById('depositText').value);
+            
+            try{
+                if(depositAmount<=0){
+                    throw Error;
+                }else if(inputHandler('depositText')){
+                    updateAmount(depositAmount,'curDeposit','curBalance','depositText');
+                }else{
+                    throw Error;
+                }
+                //document.getElementById('curDeposit').innerText = "00";
+            }catch(err){
+                alert("Please Enter Your Deposit Amount...");
+                document.getElementById("depositText").value = "";
+            }
+            
+            ///updateAmount(depositAmount,'curDeposit','curBalance','depositText');
+
             // console.log(curDeposit);
             // let curDeposit = parseFloat(document.getElementById('curDeposit').innerText);
             // curDeposit += depositAmount;
             // document.getElementById('curDeposit').innerHTML = curDeposit;
             // const curBalance = parseFloat(document.getElementById('curBalance').innerText);
             // console.log(curBalance);
-            updateAmount(depositAmount,'curDeposit','curBalance','depositText');
 
         });
 
@@ -142,7 +188,18 @@
         const withdrawBtn = document.getElementById("addWithdraw");
         withdrawBtn.addEventListener("click", function(){
             const withdrawAmount = parseFloat(document.getElementById("withdrawText").value);
-            updateAmount(withdrawAmount,'curWithdraw','curBalance','withdrawText');
+            try{
+                if(withdrawAmount<=0){
+                    throw Error;
+                }else if(inputHandler('withdrawText')){
+                    updateAmount(withdrawAmount,'curWithdraw','curBalance','withdrawText');
+                }else{
+                    throw Error;
+                }
+            }catch(err){
+                alert("Please Enter Your Withdraw Amount...")
+                document.getElementById("withdrawText").value = "";
+            }
         });
 
         // Any Update...
