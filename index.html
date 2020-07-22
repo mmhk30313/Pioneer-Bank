@@ -38,6 +38,7 @@
             transition-duration: 0.8s;
             transition-delay: 0.2s;
             overflow: scroll;
+/* অনেক বড় সংখ্যা হতে পারে। যেমন Bil-Gates,Mark-JukerBerg...এর টাকা। তখন Overflow হয়ে যায়। */
         }
         .deposit:hover, .withdraw:hover, .balance:hover{
             transform: scale(1.1);
@@ -193,7 +194,7 @@
                 }
                 //document.getElementById('curDeposit').innerText = "00";
             }catch(err){
-                alert("Please Enter Your Deposit Amount...");
+                alert("Please Enter Your Valid Deposit Amount...");
                 document.getElementById("depositText").value = "";
             }
             
@@ -228,7 +229,7 @@
                         throw Error;
                     }
                 }catch(err){
-                    alert("Please Enter Your Withdraw Amount...")
+                    alert("Please Enter Your Valid Withdraw Amount...")
                     document.getElementById("withdrawText").value = "";
                 }
             }
